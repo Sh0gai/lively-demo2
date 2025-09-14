@@ -2,22 +2,23 @@
 
 {% block content %}
 
-    <h1>Examples</h1>
+    <h1><i class="fas fa-chart-bar me-3"></i>Game Statistics</h1>
 
 
 <div class="container mt-4">
-    <a class="btn btn-primary" href="{{ url_for('examples.show_examples') }}">Show All Examples</a>
-    <a class="btn btn-success ml-2" href="{{ url_for('examples.show_examples', add='true') }}">Add Example</a>
+    <p class="lead mb-4">Detailed statistics from UGA vs Tennessee matchups (2016-2024)</p>
+    <a class="btn btn-primary" href="{{ url_for('examples.show_examples') }}">Show All Games</a>
+    <a class="btn btn-success ml-2" href="{{ url_for('examples.show_examples', add='true') }}">Add Game</a>
     <table id="data-table" class="table table-striped table-bordered mt-4">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
+                <th>Year</th>
+                <th>Player</th>
                 <th>Position</th>
-                <th>Goals</th>
-                <th>Assists</th>
+                <th>Touchdowns</th>
+                <th>Yards</th>
                 <th>Points</th>
-                <th>Club Name</th>
+                <th>Team</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -36,7 +37,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editModalLabel">Edit Example</h5>
+        <h5 class="modal-title" id="editModalLabel">Edit Game Stats</h5>
         <a href="{{ url_for('examples.show_examples') }}" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </a>
@@ -45,7 +46,7 @@
         {% if edit_example %}
         <form action="{{ url_for('examples.edit_example', athlete_id=edit_example.athlete_id) }}" method="post">
           <div class="form-group">
-            <label for="editName">Name:</label>
+            <label for="editName">Player:</label>
             <input type="text" class="form-control" id="editName" name="name" value="{{ edit_example.name }}" required>
           </div>
           <div class="form-group">
@@ -53,16 +54,23 @@
             <input type="text" class="form-control" id="editPosition" name="position" value="{{ edit_example.position }}" required>
           </div>
           <div class="form-group">
-            <label for="editGoals">Goals:</label>
+            <label for="editGoals">Touchdowns:</label>
             <input type="number" class="form-control" id="editGoals" name="goals" value="{{ edit_example.goals }}" required>
           </div>
           <div class="form-group">
-            <label for="editAssists">Assists:</label>
+            <label for="editAssists">Yards:</label>
             <input type="number" class="form-control" id="editAssists" name="assists" value="{{ edit_example.assists }}" required>
           </div>
           <div class="form-group">
-            <label for="editClubName">Club Name:</label>
-            <input type="text" class="form-control" id="editClubName" name="club_name" value="{{ edit_example.club_name or '' }}">
+            <label for="editClubName">Team:</label>
+            <select class="form-control" id="editClubName" name="club_name">
+                <option value="UGA" {{ 'selected' if edit_example.club_name == 'UGA' else '' }}>UGA</option>
+                <option value="Tennessee" {{ 'selected' if edit_example.club_name == 'Tennessee' else '' }}>Tennessee</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editGameYear">Game Year:</label>
+            <input type="number" class="form-control" id="editGameYear" name="game_year" value="{{ edit_example.game_year or 2024 }}" min="2016" max="2024" required>
           </div>
         </div>
         <div class="modal-footer">
@@ -115,7 +123,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Add New Example</h5>
+        <h5 class="modal-title" id="addModalLabel">Add New Game Stats</h5>
         <a href="{{ url_for('examples.show_examples') }}" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </a>
@@ -123,7 +131,7 @@
       <div class="modal-body">
         <form action="{{ url_for('examples.add_example') }}" method="post">
           <div class="form-group">
-            <label for="addName">Name:</label>
+            <label for="addName">Player:</label>
             <input type="text" class="form-control" id="addName" name="name" required>
           </div>
           <div class="form-group">
@@ -131,21 +139,28 @@
             <input type="text" class="form-control" id="addPosition" name="position" required>
           </div>
           <div class="form-group">
-            <label for="addGoals">Goals:</label>
+            <label for="addGoals">Touchdowns:</label>
             <input type="number" class="form-control" id="addGoals" name="goals" value="0" required>
           </div>
           <div class="form-group">
-            <label for="addAssists">Assists:</label>
+            <label for="addAssists">Yards:</label>
             <input type="number" class="form-control" id="addAssists" name="assists" value="0" required>
           </div>
           <div class="form-group">
-            <label for="addClubName">Club Name:</label>
-            <input type="text" class="form-control" id="addClubName" name="club_name">
+            <label for="addClubName">Team:</label>
+            <select class="form-control" id="addClubName" name="club_name">
+                <option value="UGA">UGA</option>
+                <option value="Tennessee">Tennessee</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="addGameYear">Game Year:</label>
+            <input type="number" class="form-control" id="addGameYear" name="game_year" value="2024" min="2016" max="2024" required>
           </div>
         </div>
         <div class="modal-footer">
           <a href="{{ url_for('examples.show_examples') }}" class="btn btn-secondary">Cancel</a>
-          <button type="submit" class="btn btn-success">Add Example</button>
+          <button type="submit" class="btn btn-success">Add Game Stats</button>
         </div>
         </form>
     </div>

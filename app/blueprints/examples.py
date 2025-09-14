@@ -22,38 +22,49 @@ def show_examples():
     else:
         try:
             if edit_id:
-                query = "SELECT * FROM athletes_data WHERE athlete_id = %s"
-                with connection.cursor() as cursor:
-                    cursor.execute(query, (edit_id,))
-                    edit_example = cursor.fetchone()
-            
+                query = "SELECT * FROM athletes_data WHERE athlete_id = ?"
+                cursor = connection.execute(query, (edit_id,))
+                edit_example = cursor.fetchone()
+
             if delete_id:
-                query = "SELECT * FROM athletes_data WHERE athlete_id = %s"
-                with connection.cursor() as cursor:
-                    cursor.execute(query, (delete_id,))
-                    delete_example = cursor.fetchone()
-            
+                query = "SELECT * FROM athletes_data WHERE athlete_id = ?"
+                cursor = connection.execute(query, (delete_id,))
+                delete_example = cursor.fetchone()
+
             # Get all examples for the table
-            query = "SELECT * FROM athletes_data"
-            with connection.cursor() as cursor:
-                cursor.execute(query)
-                result = cursor.fetchall()
-                
+            query = "SELECT * FROM athletes_data ORDER BY game_year DESC, club_name, name"
+            cursor = connection.execute(query)
+            result = cursor.fetchall()
+
         except Exception as e:
             flash(f"Database error: {e}", "error")
             result = []
     
     if result:
-        df = pd.DataFrame(result)
-        # Add edit and delete buttons to the Actions column
-        def create_actions(row):
-            id = row['athlete_id']
-            return (f'<a href="{url_for("examples.show_examples", edit_id=id)}" class="btn btn-sm btn-info">Edit</a> '
-                   f'<a href="{url_for("examples.show_examples", delete_id=id)}" class="btn btn-sm btn-danger">Delete</a>')
-        
-        df['Actions'] = df.apply(create_actions, axis=1)
-        table_html = df.to_html(classes='table table-striped table-bordered', index=False, header=False, escape=False)
-        rows_only = table_html.split('<tbody>')[1].split('</tbody>')[0]
+        # Convert SQLite Row objects to dictionaries for pandas
+        data = [dict(row) for row in result]
+        df = pd.DataFrame(data)
+
+        # Reorder columns to show Year first and rename for display
+        if not df.empty:
+            # Rename columns for better display
+            display_df = df[['game_year', 'name', 'position', 'goals', 'assists', 'points', 'club_name', 'athlete_id']].copy()
+            display_df.columns = ['Year', 'Player', 'Position', 'Touchdowns', 'Yards', 'Points', 'Team', 'ID']
+
+            # Add edit and delete buttons to the Actions column
+            def create_actions(row):
+                id = row['ID']
+                return (f'<a href="{url_for("examples.show_examples", edit_id=id)}" class="btn btn-sm btn-info">Edit</a> '
+                       f'<a href="{url_for("examples.show_examples", delete_id=id)}" class="btn btn-sm btn-danger">Delete</a>')
+
+            display_df['Actions'] = display_df.apply(create_actions, axis=1)
+            # Drop the ID column as it's only needed for actions
+            display_df = display_df.drop('ID', axis=1)
+
+            table_html = display_df.to_html(classes='table table-striped table-bordered', index=False, header=False, escape=False)
+            rows_only = table_html.split('<tbody>')[1].split('</tbody>')[0]
+        else:
+            rows_only = ""
     else:
         rows_only = ""
     
@@ -68,14 +79,17 @@ def edit_example(athlete_id):
     goals = request.form.get('goals', type=int, default=0)
     assists = request.form.get('assists', type=int, default=0)
     club_name = request.form.get('club_name')
-    
+    game_year = request.form.get('game_year', type=int, default=2024)
+
+    # Calculate points based on touchdowns
+    points = goals * 6
+
     query = """
     UPDATE athletes_data
-    SET name = %s, position = %s, goals = %s, assists = %s, club_name = %s
-    WHERE athlete_id = %s
+    SET name = ?, position = ?, goals = ?, assists = ?, points = ?, club_name = ?, game_year = ?
+    WHERE athlete_id = ?
     """
-    with connection.cursor() as cursor:
-        cursor.execute(query, (name, position, goals, assists, club_name, athlete_id))
+    connection.execute(query, (name, position, goals, assists, points, club_name, game_year, athlete_id))
     connection.commit()
     
     flash("Example updated successfully!", "success")
@@ -84,9 +98,8 @@ def edit_example(athlete_id):
 @examples.route('/delete/<int:athlete_id>', methods=['POST'])
 def delete_example(athlete_id):
     connection = get_db()
-    query = "DELETE FROM athletes_data WHERE athlete_id = %s"
-    with connection.cursor() as cursor:
-        cursor.execute(query, (athlete_id,))
+    query = "DELETE FROM athletes_data WHERE athlete_id = ?"
+    connection.execute(query, (athlete_id,))
     connection.commit()
     
     flash("Example deleted successfully!", "success")
@@ -100,15 +113,17 @@ def add_example():
     position = request.form.get('position')
     goals = request.form.get('goals', type=int, default=0)
     assists = request.form.get('assists', type=int, default=0)
-    points = request.form.get('points', type=int, default=0)
     club_name = request.form.get('club_name')
-    
+    game_year = request.form.get('game_year', type=int, default=2024)
+
+    # Calculate points based on touchdowns
+    points = goals * 6
+
     query = """
-    INSERT INTO athletes_data (name, position, goals, assists, points, club_name)
-    VALUES (%s, %s, %s, %s, %s, %s)
+    INSERT INTO athletes_data (name, position, goals, assists, points, club_name, game_year)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
     """
-    with connection.cursor() as cursor:
-        cursor.execute(query, (name, position, goals, assists, points, club_name))
+    connection.execute(query, (name, position, goals, assists, points, club_name, game_year))
     connection.commit()
     
     flash("New example added successfully!", "success")

@@ -2,25 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>GCSU MIS Starter Kit</title>
+    <title>Rocky Flop</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --gcsu-blue: #003399;
-            --gcsu-green: #006633;
-            --gcsu-light-blue: #e6f2ff;
-            --gcsu-light-green: #e6f7e6;
+            --primary-red: #dc3545;
+            --primary-black: #212529;
+            --light-red: #ffe6e6;
+            --light-black: #f8f9fa;
         }
         
         body {
-            background: linear-gradient(135deg, var(--gcsu-light-blue) 0%, #ffffff 50%, var(--gcsu-light-green) 100%);
+            background: linear-gradient(135deg, var(--light-red) 0%, #ffffff 50%, var(--light-black) 100%);
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         .navbar-gcsu {
-            background: linear-gradient(90deg, var(--gcsu-blue) 0%, var(--gcsu-green) 100%);
+            background: linear-gradient(90deg, var(--primary-red) 0%, var(--primary-black) 100%);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 1rem 0;
         }
@@ -68,12 +68,12 @@
         }
         
         .alert-success {
-            background: linear-gradient(45deg, var(--gcsu-green), #28a745);
+            background: linear-gradient(45deg, var(--primary-red), var(--primary-black));
             color: white;
         }
         
         .btn-primary {
-            background: linear-gradient(45deg, var(--gcsu-blue), var(--gcsu-green));
+            background: linear-gradient(45deg, var(--primary-red), var(--primary-black));
             border: none;
             border-radius: 25px;
             padding: 0.5rem 1.5rem;
@@ -83,7 +83,7 @@
         
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 51, 153, 0.3);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
         }
         
         .card {
@@ -98,7 +98,7 @@
         }
         
         h1, h2, h3 {
-            color: var(--gcsu-blue);
+            color: var(--primary-black);
         }
         
         .table {
@@ -108,7 +108,7 @@
         }
         
         .table thead th {
-            background: linear-gradient(90deg, var(--gcsu-blue), var(--gcsu-green));
+            background: linear-gradient(90deg, var(--primary-red), var(--primary-black));
             color: white;
             border: none;
             font-weight: 600;
@@ -118,7 +118,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-gcsu">
         <a class="navbar-brand" href="{{ url_for('index') }}">
-            <i class="fas fa-home me-2"></i>GCSU MIS Starter Kit
+            <i class="fas fa-home me-2"></i>Rocky Flop
         </a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
