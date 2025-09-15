@@ -52,29 +52,29 @@ def init_db():
 
         # Insert sample data
         sample_data = [
-            ('Carson Beck', 'QB', 3, 347, 'UGA', 2024),
-            ('Dylan Sampson', 'RB', 2, 178, 'Tennessee', 2024),
-            ('Ladd McConkey', 'WR', 2, 135, 'UGA', 2023),
-            ('Hendon Hooker', 'QB', 1, 245, 'Tennessee', 2022),
-            ('Stetson Bennett', 'QB', 4, 289, 'UGA', 2022),
-            ('Kenny McIntosh', 'RB', 2, 156, 'UGA', 2021),
-            ('JT Daniels', 'QB', 3, 312, 'UGA', 2021),
-            ('Jabari Small', 'RB', 1, 89, 'Tennessee', 2021),
-            ("D'Andre Swift", 'RB', 3, 186, 'UGA', 2020),
-            ('Jarrett Guarantano', 'QB', 0, 147, 'Tennessee', 2020),
-            ('Jake Fromm', 'QB', 2, 221, 'UGA', 2019),
-            ('Brian Maurer', 'QB', 1, 156, 'Tennessee', 2019),
-            ('Elijah Holyfield', 'RB', 2, 128, 'UGA', 2018),
-            ('Ty Chandler', 'RB', 0, 45, 'Tennessee', 2018),
-            ('Sony Michel', 'RB', 3, 145, 'UGA', 2017),
-            ('John Kelly', 'RB', 0, 87, 'Tennessee', 2017),
-            ('Nick Chubb', 'RB', 2, 119, 'UGA', 2016),
-            ('Joshua Dobbs', 'QB', 2, 312, 'Tennessee', 2016)
+            ('Mary Johnson', 'Teacher', 5, 120, 'Gray', 2020),
+            ('Robert Smith', 'Farmer', 3, 80, 'Round Oak', 2018),
+            ('Linda Williams', 'Nurse', 4, 150, 'Gray', 2019),
+            ('James Brown', 'Mechanic', 2, 60, 'Haddock', 2021),
+            ('Patricia Davis', 'Librarian', 6, 200, 'Gray', 2017),
+            ('Michael Wilson', 'Pastor', 8, 300, 'Round Oak', 2015),
+            ('Jennifer Moore', 'Business Owner', 4, 100, 'Gray', 2022),
+            ('David Taylor', 'Police Officer', 3, 90, 'Gray', 2020),
+            ('Sarah Anderson', 'Real Estate Agent', 5, 140, 'Haddock', 2019),
+            ('Christopher Thomas', 'Fire Chief', 7, 250, 'Gray', 2016),
+            ('Lisa Jackson', 'Bank Manager', 3, 75, 'Round Oak', 2021),
+            ('Mark White', 'County Commissioner', 10, 400, 'Gray', 2014),
+            ('Nancy Harris', 'Veterinarian', 4, 110, 'Haddock', 2018),
+            ('Richard Martin', 'Construction Worker', 2, 50, 'Round Oak', 2023),
+            ('Susan Thompson', 'School Principal', 6, 180, 'Gray', 2017),
+            ('Kevin Garcia', 'Auto Shop Owner', 3, 70, 'Haddock', 2020),
+            ('Angela Martinez', 'Healthcare Worker', 5, 160, 'Gray', 2019),
+            ('Charles Robinson', 'Retired Military', 4, 130, 'Round Oak', 2022)
         ]
 
         for data in sample_data:
             name, position, goals, assists, club_name, game_year = data
-            points = goals * 6  # Calculate points as touchdowns * 6
+            points = goals * 10 + assists // 10  # Calculate community score as projects*10 + volunteer_hours/10
             db.execute('''
                 INSERT INTO athletes_data (name, position, goals, assists, points, club_name, game_year)
                 VALUES (?, ?, ?, ?, ?, ?, ?)

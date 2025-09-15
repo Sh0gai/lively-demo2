@@ -34,7 +34,7 @@ def test_database():
             print("-" * 60)
             for record in records:
                 print(f"{record['name']} ({record['position']}) - {record['club_name']} {record['game_year']}")
-                print(f"   TDs: {record['goals']}, Yards: {record['assists']}, Points: {record['points']}")
+                print(f"   Projects: {record['goals']}, Volunteer Hours: {record['assists']}, Community Score: {record['points']}")
                 print()
 
             return True

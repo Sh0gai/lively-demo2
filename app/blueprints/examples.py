@@ -49,7 +49,7 @@ def show_examples():
         if not df.empty:
             # Rename columns for better display
             display_df = df[['game_year', 'name', 'position', 'goals', 'assists', 'points', 'club_name', 'athlete_id']].copy()
-            display_df.columns = ['Year', 'Player', 'Position', 'Touchdowns', 'Yards', 'Points', 'Team', 'ID']
+            display_df.columns = ['Year Moved', 'Name', 'Occupation', 'Projects', 'Volunteer Hours', 'Community Score', 'City', 'ID']
 
             # Add edit and delete buttons to the Actions column
             def create_actions(row):
@@ -81,8 +81,8 @@ def edit_example(athlete_id):
     club_name = request.form.get('club_name')
     game_year = request.form.get('game_year', type=int, default=2024)
 
-    # Calculate points based on touchdowns
-    points = goals * 6
+    # Calculate community score based on projects and volunteer hours
+    points = goals * 10 + assists // 10
 
     query = """
     UPDATE athletes_data
@@ -116,8 +116,8 @@ def add_example():
     club_name = request.form.get('club_name')
     game_year = request.form.get('game_year', type=int, default=2024)
 
-    # Calculate points based on touchdowns
-    points = goals * 6
+    # Calculate community score based on projects and volunteer hours
+    points = goals * 10 + assists // 10
 
     query = """
     INSERT INTO athletes_data (name, position, goals, assists, points, club_name, game_year)
